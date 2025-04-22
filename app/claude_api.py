@@ -11,7 +11,7 @@ async def ask_claude(prompt: str) -> str:
         "Content-Type": "application/json"
     }
     body = {
-        "model": "claude-3-sonnet-20240229",
+        "model": "claude-3-7-sonnet-20250219",
         "max_tokens": 1024,
         "messages": [{"role": "user", "content": prompt}]
     }
