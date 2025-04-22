@@ -1,19 +1,12 @@
-# server.py
-from mcp.server.fastmcp import FastMCP
+from fastapi import FastAPI
+from fastmcp import FastMCP
+from app.documents import read_file, list_files
 
-# Create an MCP server
-mcp = FastMCP("Demo")
+app = FastAPI()
+mcp = FastMCP("DocumentExplorer")
 
-
-# Add an addition tool
-@mcp.tool()
-def add(a: int, b: int) -> int:
-    """Add two numbers"""
-    return a + b
-
-
-# Add a dynamic greeting resource
-@mcp.resource("greeting://{name}")
-def get_greeting(name: str) -> str:
-    """Get a personalized greeting"""
-    return f"Hello, {name}!"
+@app.on_event("startup")
+async def startup_event():
+    mcp.resource("file://{filename}")(read_file)
+    mcp.tool()(list_files)
+    mcp.mount(app)
